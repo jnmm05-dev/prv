@@ -2,6 +2,7 @@
 
 FROM jupyter/scipy-notebook:cf6258237ff9
 
+USER root
 ARG NB_USER=jovyan
 ARG NB_UID=1000
 ENV USER ${NB_USER}
