@@ -1,6 +1,7 @@
 # Dockerfile
 
-FROM jupyter/scipy-notebook:cf6258237ff9
+# FROM jupyter/scipy-notebook:cf6258237ff9
+FROM rwcitek/jupyter-notebook:latest
 
 USER root
 ARG NB_USER=jovyan
