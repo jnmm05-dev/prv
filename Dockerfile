@@ -39,8 +39,8 @@ RUN apt-get update && \
         snapd \
         build-essential \
         wget && \
-        snap install firefox
-    
+    snap install firefox
+
 
 
 
