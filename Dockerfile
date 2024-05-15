@@ -40,7 +40,7 @@ RUN apt-get update && \
         wget && \
     rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install -y wget gnupg software-properties-common apt-transport-https
+RUN apt-get install -y wget gnupg build-essential
 
 # Download the Firefox deb package
 # Replace the URL below with the actual URL of the Firefox deb package you wish to install
