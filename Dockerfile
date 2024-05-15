@@ -39,20 +39,9 @@ RUN apt-get update && \
         snapd \
         build-essential \
         wget && \
+        snap install firefox
     
 
 
 
-# Download the Firefox deb package
-# Replace the URL below with the actual URL of the Firefox deb package you wish to install
-RUN wget -O firefox.deb "http://http.us.debian.org/debian/pool/main/f/firefox/firefox_126.0-1_amd64.deb"
 
-# Install Firefox from the deb package
-RUN dpkg -i firefox.deb
-
-# Fix dependencies if there are any issues
-RUN apt-get install -fy
-
-# Clean up
-RUN rm -rf /var/lib/apt/lists/*
-RUN rm firefox.deb
