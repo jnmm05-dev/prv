@@ -1,6 +1,7 @@
 # Use the official Jupyter Notebook image as the base image
 FROM jupyter/minimal-notebook
 
+# Switch to root user
 USER root
 
 # Install dependencies required for Firefox
@@ -38,18 +39,21 @@ RUN apt-get update && \
         flatpak \
         snapd \
         build-essential \
-        wget && \
-
-#dnwd
-
-    
+        wget
 
 # Install the desired Flatpak app, e.g., Firefox
-RUN flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo \
-    flatpak update  \
-    flatpak install flathub com.mozilla.Firefox -y  && \
+RUN flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo && \
+    flatpak update && \
+    flatpak install -y flathub org.mozilla.firefox
 
+# Switch back to the default user
+USER $NB_UID
 
+# Set environment variables for JupyterLab
+ENV JUPYTER_ENABLE_LAB=yes
 
+# Expose the default Jupyter notebook port
+EXPOSE 8888
 
-
+# Start Jupyter Notebook
+CMD ["start-notebook.sh"]
