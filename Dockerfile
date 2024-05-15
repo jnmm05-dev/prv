@@ -41,7 +41,7 @@ RUN apt-get update && \
         snapd \
         build-essential \
         wget \
-        firefox-esr
+        firefox \
         
 
 # Install the desired Flatpak app, e.g., Firefox
