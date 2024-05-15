@@ -40,6 +40,18 @@ RUN apt-get update && \
         wget && \
     rm -rf /var/lib/apt/lists/*
 
-    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo && \
-    flatpak update
-    RUN flatpak install flathub com.mozilla.Firefox -y
+RUN apt-get install -y wget gnupg software-properties-common apt-transport-https
+
+# Download the Firefox deb package
+# Replace the URL below with the actual URL of the Firefox deb package you wish to install
+RUN wget -O firefox.deb "http://http.us.debian.org/debian/pool/main/f/firefox/firefox_126.0-1_amd64.deb"
+
+# Install Firefox from the deb package
+RUN dpkg -i firefox.deb
+
+# Fix dependencies if there are any issues
+RUN apt-get install -fy
+
+# Clean up
+RUN rm -rf /var/lib/apt/lists/*
+RUN rm firefox.deb
