@@ -47,7 +47,7 @@ RUN apt-get update && \
 # Install the desired Flatpak app, e.g., Firefox
 RUN flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo && \
     flatpak update && \
-    snap install firefox
+    
 
 # Switch back to the default user
 USER $NB_UID
