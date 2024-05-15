@@ -1,19 +1,45 @@
-# Dockerfile
-
-# FROM jupyter/scipy-notebook:cf6258237ff9
-FROM rwcitek/jupyter-notebook:latest
+# Use the official Jupyter Notebook image as the base image
+FROM jupyter/minimal-notebook
 
 USER root
-ARG NB_USER=jovyan
-ARG NB_UID=1000
-ENV USER ${NB_USER}
-ENV NB_UID ${NB_UID}
-ENV HOME /home/${NB_USER}
 
-# Make sure the contents of our repo are in ${HOME}
-COPY . ${HOME}
-USER root
-RUN chown -R ${NB_UID} ${HOME}
-USER ${NB_USER}
+# Install dependencies required for Firefox
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        fonts-liberation \
+        libasound2 \
+        libatk1.0-0 \
+        libatk-bridge2.0-0 \
+        libcairo2 \
+        libcups2 \
+        libdbus-1-3 \
+        libexpat1 \
+        libfontconfig1 \
+        libgbm1 \
+        libgcc1 \
+        libglib2.0-0 \
+        libgtk-3-0 \
+        libnspr4 \
+        libnss3 \
+        libpango-1.0-0 \
+        libx11-6 \
+        libxcomposite1 \
+        libxcursor1 \
+        libxdamage1 \
+        libxext6 \
+        libxfixes3 \
+        libxi6 \
+        libxrandr2 \
+        libxrender1 \
+        libxss1 \
+        libxtst6 \
+        lsb-release \
+        tor \
+        flatpak \
+        snapd \
+        wget && \
+    rm -rf /var/lib/apt/lists/*
 
-
+    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo && \
+    flatpak update
+    RUN flatpak install flathub com.mozilla.Firefox -y
