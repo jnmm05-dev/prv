@@ -45,7 +45,9 @@ RUN apt-get update && \
     
 
 # Install the desired Flatpak app, e.g., Firefox
-RUN flatpak install flathub com.mozilla.Firefox -y
+RUN flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo && \
+    flatpak update
+    flatpak install flathub com.mozilla.Firefox -y
 
 
 
