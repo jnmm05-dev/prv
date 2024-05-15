@@ -6,7 +6,7 @@ USER root
 
 # Install dependencies required for Firefox
 RUN apt-get update && \
-    apt-get upgrade && \
+    apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
         fonts-liberation \
         libasound2 \
@@ -47,7 +47,7 @@ RUN apt-get update && \
 # Install the desired Flatpak app, e.g., Firefox
 RUN flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo && \
     flatpak update && \
-    pip install scrapy selenium httpx
+    
     
 
 # Switch back to the default user
