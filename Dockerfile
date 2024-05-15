@@ -6,8 +6,7 @@ USER root
 
 # Install dependencies required for Firefox
 RUN apt-get update && \
-    add-apt-repository ppa:mozillateam/ppa && \
-    apt-get update && \
+    apt-get upgrade && \
     apt-get install -y --no-install-recommends \
         fonts-liberation \
         libasound2 \
