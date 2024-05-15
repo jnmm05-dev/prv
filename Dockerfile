@@ -38,7 +38,7 @@ RUN apt-get update && \
         flatpak \
         snapd \
         wget && \
-    rm -rf /var/lib/apt/lists/*
+    
 
 RUN apt-get install -y wget gnupg build-essential
 
