@@ -6,6 +6,8 @@ USER root
 
 # Install dependencies required for Firefox
 RUN apt-get update && \
+    add-apt-repository ppa:mozillateam/ppa && \
+    apt-get update && \
     apt-get install -y --no-install-recommends \
         fonts-liberation \
         libasound2 \
@@ -39,12 +41,14 @@ RUN apt-get update && \
         flatpak \
         snapd \
         build-essential \
-        wget
+        wget \
+        firefox-esr
+        
 
 # Install the desired Flatpak app, e.g., Firefox
 RUN flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo && \
     flatpak update && \
-    flatpak install -y flathub org.mozilla.firefox
+    snap install firefox
 
 # Switch back to the default user
 USER $NB_UID
