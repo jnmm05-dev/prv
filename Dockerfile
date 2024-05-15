@@ -1,63 +1,50 @@
 # Use the official Jupyter Notebook image as the base image
 FROM jupyter/minimal-notebook
 
-# Switch to root user
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# NOTE: DO *NOT* EDIT THIS FILE.  IT IS GENERATED.
+# PLEASE UPDATE Dockerfile.txt INSTEAD OF THIS FILE
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+LABEL authors=SeleniumHQ
+
 USER root
 
-# Install dependencies required for Firefox
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y --no-install-recommends \
-        fonts-liberation \
-        libasound2 \
-        libatk1.0-0 \
-        libatk-bridge2.0-0 \
-        libcairo2 \
-        libcups2 \
-        libdbus-1-3 \
-        libexpat1 \
-        libfontconfig1 \
-        libgbm1 \
-        libgcc1 \
-        libglib2.0-0 \
-        libgtk-3-0 \
-        libnspr4 \
-        libnss3 \
-        libpango-1.0-0 \
-        libx11-6 \
-        libxcomposite1 \
-        libxcursor1 \
-        libxdamage1 \
-        libxext6 \
-        libxfixes3 \
-        libxi6 \
-        libxrandr2 \
-        libxrender1 \
-        libxss1 \
-        libxtst6 \
-        lsb-release \
-        tor \
-        flatpak \
-        snapd \
-        build-essential \
-        wget \
-        firefox \
-        
+#=========
+# Firefox
+#=========
+ARG FIREFOX_VERSION=55.0.3
+RUN apt-get update -qqy \
+  && apt-get -qqy --no-install-recommends install firefox \
+  && rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
+  && wget --no-verbose -O /tmp/firefox.tar.bz2 https://download-installer.cdn.mozilla.net/pub/firefox/releases/$FIREFOX_VERSION/linux-x86_64/en-US/firefox-$FIREFOX_VERSION.tar.bz2 \
+  && apt-get -y purge firefox \
+  && rm -rf /opt/firefox \
+  && tar -C /opt -xjf /tmp/firefox.tar.bz2 \
+  && rm /tmp/firefox.tar.bz2 \
+  && mv /opt/firefox /opt/firefox-$FIREFOX_VERSION \
+  && ln -fs /opt/firefox-$FIREFOX_VERSION/firefox /usr/bin/firefox
 
-# Install the desired Flatpak app, e.g., Firefox
-RUN flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo && \
-    flatpak update && \
-    
-    
+#============
+# GeckoDriver
+#============
+ARG GECKODRIVER_VERSION=0.18.0
+RUN wget --no-verbose -O /tmp/geckodriver.tar.gz https://github.com/mozilla/geckodriver/releases/download/v$GECKODRIVER_VERSION/geckodriver-v$GECKODRIVER_VERSION-linux64.tar.gz \
+  && rm -rf /opt/geckodriver \
+  && tar -C /opt -zxf /tmp/geckodriver.tar.gz \
+  && rm /tmp/geckodriver.tar.gz \
+  && mv /opt/geckodriver /opt/geckodriver-$GECKODRIVER_VERSION \
+  && chmod 755 /opt/geckodriver-$GECKODRIVER_VERSION \
+  && ln -fs /opt/geckodriver-$GECKODRIVER_VERSION /usr/bin/geckodriver
 
-# Switch back to the default user
-USER $NB_UID
+USER seluser
 
-# Set environment variables for JupyterLab
-ENV JUPYTER_ENABLE_LAB=yes
+COPY generate_config /opt/bin/generate_config
 
-# Expose the default Jupyter notebook port
-EXPOSE 8888
+# Running this command as sudo just to avoid the message:
+# To run a command as administrator (user "root"), use "sudo <command>". See "man sudo_root" for details.
+# When logging into the container
+RUN sudo echo ""
 
-# Start Jupyter Notebook
-CMD ["start-notebook.sh"]
+# Generating a default config during build time
+RUN /opt/bin/generate_config > /opt/selenium/config.json
