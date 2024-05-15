@@ -39,7 +39,13 @@ RUN apt-get update && \
         snapd \
         build-essential \
         wget && \
-    snap install firefox
+
+#dnwd
+
+    
+
+# Install the desired Flatpak app, e.g., Firefox
+RUN flatpak install flathub com.mozilla.Firefox -y
 
 
 
