@@ -1,5 +1,8 @@
 # Use the official Jupyter Notebook image as the base image
-FROM jupyter/minimal-notebook
+FROM ubuntu:focal
+
+ARG DEBIAN_FRONTEND=noninteractive
+
 
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # NOTE: DO *NOT* EDIT THIS FILE.  IT IS GENERATED.
@@ -15,7 +18,7 @@ USER root
 #=========
 ARG FIREFOX_VERSION=55.0.3
 RUN apt-get update -qqy \
-  && apt-get -qqy --no-install-recommends install firefox \
+  && apt-get -qqy install -y python3 python3-pip wget fonts-liberation libappindicator3-1 libasound2 libatk-bridge2.0-0 libnspr4 libnss3 lsb-release xdg-utils libxss1 libdbus-glib-1-2 libgbm1 \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
   && wget --no-verbose -O /tmp/firefox.tar.bz2 https://ftp.mozilla.org/pub/firefox/releases/92.0.1/linux-x86_64/en-US/firefox-92.0.1.tar.bz2 \
   && apt-get -y purge firefox \
